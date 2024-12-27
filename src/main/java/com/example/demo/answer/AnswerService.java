@@ -4,6 +4,9 @@ import com.example.demo.question.DataNotFoundException;
 import com.example.demo.question.Question;
 import com.example.demo.user.SiteUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +27,11 @@ public class AnswerService {
         answer.setAuthor(author);
         this.answerRepository.save(answer);
         return answer;
+    }
+
+    public Page<Answer> getList(int page){
+        Pageable pageable = PageRequest.of(page, 3);
+        return answerRepository.findAll(pageable);
     }
 
     public Answer getAnswer(Integer id) {

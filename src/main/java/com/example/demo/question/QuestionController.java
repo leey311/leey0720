@@ -1,6 +1,8 @@
 package com.example.demo.question;
 
+import com.example.demo.answer.Answer;
 import com.example.demo.answer.AnswerForm;
+import com.example.demo.answer.AnswerService;
 import com.example.demo.user.SiteUser;
 import com.example.demo.user.UserService;
 import jakarta.validation.Valid;
@@ -23,18 +25,23 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final UserService userService;
+    private final AnswerService answerService;
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
-        Page<Question> paging = this.questionService.getList(page);
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+                       @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<Question> paging = this.questionService.getList(page, kw);
         model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
         return "question_list";
     }
 
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
+    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, @RequestParam(value = "page", defaultValue = "0") int page) {
         Question question = this.questionService.getQuestion(id);
+        Page<Answer> paging = answerService.getList(page);
         model.addAttribute("question", question);
+        model.addAttribute("paging", paging);
         return "question_detail";
     }
 
