@@ -1,5 +1,6 @@
 package com.example.demo.user;
 
+import com.example.demo.SecurityConfig;
 import com.example.demo.question.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,26 +11,25 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-        private final UserRepository userRepository;
-        private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final SecurityConfig securityConfig;
+    private final PasswordEncoder passwordEncoder;
 
-        public SiteUser create(String username, String email, String password){
-            SiteUser user = new SiteUser();
-            user.setEmail(email);
-            user.setUsername(username);
-            user.setPassword(passwordEncoder.encode(password));
-            userRepository.save(user);
-            return user;
-        }
+    public void create(String name, String password, String email){
+        SiteUser siteUser = new SiteUser();
+        siteUser.setName(name);
+        siteUser.setPassword(passwordEncoder.encode(password));
+        siteUser.setEmail(email);
 
-    public SiteUser getUser(String username) {
-        Optional<SiteUser> siteUser = this.userRepository.findByusername(username);
-        if (siteUser.isPresent()) {
-            return siteUser.get();
-        } else {
-            throw new DataNotFoundException("siteuser not found");
-        }
+        userRepository.save(siteUser);
     }
+    public SiteUser getUser(String name){
+        Optional<SiteUser> siteUser = userRepository.findByName(name);
+        if (siteUser.isPresent()){
+            return siteUser.get();
+        }else{
+            throw new DataNotFoundException("site user not found");
+        }
 
-    
+    }
 }

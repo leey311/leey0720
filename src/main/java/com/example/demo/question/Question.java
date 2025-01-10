@@ -1,6 +1,7 @@
 package com.example.demo.question;
 
 import com.example.demo.answer.Answer;
+import com.example.demo.comment.Comment;
 import com.example.demo.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,9 +11,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-@Setter
 @Getter
+@Setter
+@Entity
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,19 +22,22 @@ public class Question {
     @Column(length = 200)
     private String subject;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private LocalDateTime createDate;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-    private List<Answer> answerList ;
+    private List<Answer> answerList;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList;
 
     @ManyToOne
-    private SiteUser author;
-
-    private LocalDateTime modifyDate;
+    private SiteUser siteUser;
 
     @ManyToMany
-    Set<SiteUser> voter;
+    private Set<SiteUser> voter;
+
+    private LocalDateTime modifyDate;
 }

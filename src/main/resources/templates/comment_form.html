@@ -1,8 +1,8 @@
 <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
 <div class="container my-3">
 
-    <h5 class="my-3 border-bottom pb-2">답변 수정</h5>
-    <form th:object="${answerForm}" method="post">
+    <h5 class="my-3 border-bottom pb-2">답글</h5>
+    <form th:object="${commentForm}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div th:if="${#fields.hasAnyErrors()}">
             <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />

@@ -1,0 +1,28 @@
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+<div class="container my-3">
+
+<!-- 질문 -->
+<h2 th:text="${answer.content}"></h2>
+<div th:text="${answer.content}"></div>
+<div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+    <!-- 답변의 갯수 표시 -->
+    <h5 th:text="|${#lists.size(answer.commentList)}개의 답변이 있습니다.|"></h5>
+
+    <table>
+        <thead>
+        <tr>
+        <tr th:each="comment : ${commentList}">
+            <td th:text="${comment.content}"></td>
+            <td th:text="${comment.createDate}"></td>
+        </tr>
+        </tr>
+        </thead>
+    </table>
+
+    <form th:action="@{|/comment/create2/${answer.id}|}" th:object="${commentForm}" method="post">
+        <div th:if="${#fields.hasAnyErrors()}">
+            <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+        </div>
+        <textarea th:field="*{content}" rows="5" class="form-control"></textarea>
+        <input type="submit" value="댓글등록" >
+    </form>
